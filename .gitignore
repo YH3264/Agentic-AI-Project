@@ -1,0 +1,21 @@
+# Python Cache
+__pycache__/
+*.py[cod]
+
+# Virtual Environment
+.venv/
+.python-version
+
+# Environment Variables / Secrets
+.env
+
+# Jupyter Notebook Checkpoints
+.ipynb_checkpoints/
+
+# SQLite Databases
+*.db
+*.sqlite
+
+# IDE Settings
+.idea/
+.vscode/
