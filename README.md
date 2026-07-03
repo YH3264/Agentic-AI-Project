@@ -35,6 +35,50 @@ The **AI Shopping Assistant** (`8_project_shopping_agent`) is a comprehensive we
 4. **API Integration (Product Ratings)**: Calls the ratings API to aggregate reviews and ensure products meet specified star limits (e.g., minimum 4.5 stars).
 5. **Checkout & Ordering**: Records confirmed purchases directly inside the database orders table, returning an order confirmation ID.
 
+### SQLite Database (`store.db`) Schema
+The database comes pre-created, seeded with sample data, and is located in the [8_project_shopping_agent](file:///c:/Users/lathi/OneDrive/Desktop/lathika/code/Agentic%20ai%20project/8_project_shopping_agent) folder. No manual database setup or creation script is needed to start running the application.
+
+Below is the database table schema configuration:
+
+#### 1. `products`
+Holds the catalog of items available in the store.
+```sql
+CREATE TABLE products (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    category TEXT,
+    price REAL,
+    description TEXT,
+    is_organic INTEGER DEFAULT 0
+);
+```
+
+#### 2. `reviews`
+Stores review ratings submitted by customers for different products.
+```sql
+CREATE TABLE reviews (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    product_id INTEGER,
+    rating REAL,
+    reviewer_name TEXT,
+    review_text TEXT,
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+```
+
+#### 3. `orders`
+Logs successfully checked-out orders submitted via the assistant.
+```sql
+CREATE TABLE orders (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    product_id INTEGER NOT NULL,
+    product_name TEXT NOT NULL,
+    price REAL NOT NULL,
+    ordered_at TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+```
+
 ### Core Files
 - `app.py`: Streamlit frontend managing conversational UI state, sidebar image uploads, and agent invoking logic.
 - `shopping_agent.py`: Agent backend definition compiling tools (`search_products`, `get_rating`, `checkout`, `describe_product_image`) and instructions using Groq's `qwen/qwen3-32b` model.
